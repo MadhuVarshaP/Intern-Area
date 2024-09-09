@@ -4,14 +4,16 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { IoMdArrowDropup } from "react-icons/io";
 import { IoMdSearch } from "react-icons/io";
 import { Link } from "react-router-dom";
-
+import profile from "../Assets/user.jpg"
 import {useAuth0} from '@auth0/auth0-react'
+import LogoutButton from "./LogoutButton";
+import { useProfile } from "../utils/ProfileContext";
 
 function Navbar() {
   const [dropDownIntern, setDropDownIntern] = useState(false);
   const [dropDownJob, setDropDownJob] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
-  // const { profilePicture } = useAuth();
+  const { profilePicture } = useProfile();
+
   const {
     user,
     isAuthenticated,
@@ -145,13 +147,16 @@ function Navbar() {
           )}
         </button>
       </div>
-      <div className="flex justify-end w-full space-x-4 items-center">
+      <div className="flex justify-end w-full space-x-4 items-center mr-[20px]">
         <IoMdSearch className="h-[30px] w-[30px]" />
         <input
           type="text"
           className="flex items-center bg-gray-200 w-[250px] p-[10px] rounded-md"
         ></input>
-        <Link
+        
+        {!isAuthenticated && (
+          <>
+          <Link
           to="/login"
           className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit"
         >
@@ -163,27 +168,32 @@ function Navbar() {
         >
           <p>Register</p>
         </Link>
-        <button className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit">
-          <p>Hire Talent</p>
-        </button>
         <Link
           to="/admin"
           className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit"
         >
           <p>Admin</p>
         </Link>
+        </>
+        )}
+
+        <button className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit">
+          <p>Hire Talent</p>
+        </button>
+        
       </div>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 mr-[50px]">
         {isAuthenticated && (
           <>
-            <Link to="/profile" className="text-xl">
-              Profile
-            </Link>
-            {/* <img
-              src={profilePicture}
+            <img
+              src={profilePicture || user.picture || profile}
               alt="Profile"
               className="w-10 h-10 rounded-full"
-            /> */}
+            />
+            <Link to="/profile" className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit">
+              Profile
+            </Link>
+            <LogoutButton />
           </>
         )}
       </div>

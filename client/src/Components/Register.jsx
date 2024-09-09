@@ -18,6 +18,16 @@ function Register() {
       </div>
       <LoginButton />
       <div className="flex justify-center space-x-5 pt-[20px]">
+        <p className="font-semibold">Name</p>
+        <input
+          type="text"
+          className="border-[2px] py-[5px] rounded-md w-[400px] px-[10px]"
+          placeholder="John Doe"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+      <div className="flex justify-center space-x-5 pt-[20px]">
         <p className="font-semibold">Email</p>
         <input
           type="text"
@@ -37,16 +47,7 @@ function Register() {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <div className="flex justify-center space-x-5 pt-[20px]">
-        <p className="font-semibold">Name</p>
-        <input
-          type="text"
-          className="border-[2px] py-[5px] rounded-md w-[400px] px-[10px]"
-          placeholder="John Doe"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
+      
       <div className="flex flex-col justify-center items-center">
       <p className="my-[20px]">
         By signing up, you agree to our{" "}

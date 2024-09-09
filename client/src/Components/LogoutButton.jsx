@@ -6,7 +6,7 @@ function LogoutButton() {
 
   return (
     isAuthenticated && (
-        <button className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit w-[400px] my-[20px]" onClick={() => logout()}>LogOut </button>
+        <button className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit" onClick={() => logout()}>LogOut </button>
 
     )
   )

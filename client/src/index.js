@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { Auth0Provider } from '@auth0/auth0-react';
-import { unstable_HistoryRouter } from 'react-router-dom';
+import { ProfileProvider } from './utils/ProfileContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -24,7 +24,9 @@ root.render(
       redirect_uri: window.location.origin
     }}
   >
+    <ProfileProvider>
     <App />
+    </ProfileProvider>
   </Auth0Provider>
   </React.StrictMode>
 );
