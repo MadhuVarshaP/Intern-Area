@@ -18,7 +18,9 @@ function LatestIntern() {
   };
 
   const nextClick = () => {
-    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, internCard.length -1 ));
+    setCurrentIndex((prevIndex) =>
+      Math.min(prevIndex + 1, internCard.length - 1)
+    );
   };
 
   return (
@@ -125,7 +127,10 @@ function LatestIntern() {
         }}
       >
         {internCard.map((intern, title) => (
-          <div key={title} className="flex justify-center items-center w-full sm:w-400px">
+          <div
+            key={title}
+            className="flex justify-center items-center w-full sm:w-400px"
+          >
             <Card
               title={intern.title}
               company={intern.company}
@@ -136,9 +141,7 @@ function LatestIntern() {
           </div>
         ))}
       </div>
-      <div
-        className="flex justify-center space-x-20 py-[20px] "
-      >
+      <div className="flex justify-center space-x-20 py-[20px] ">
         <button
           className="rounded-[999px] flex justify-center items-center border-[2px] p-[8px]"
           onClick={prevClick}
@@ -149,7 +152,7 @@ function LatestIntern() {
         <button
           className="rounded-[999px] flex justify-center items-center border-[2px] p-[8px]"
           onClick={nextClick}
-          disabled={currentIndex === internCard.length-1}
+          disabled={currentIndex === internCard.length - 1}
         >
           <GrFormNext className="h-[30px] w-[30px]" />
         </button>

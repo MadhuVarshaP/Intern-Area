@@ -16,12 +16,18 @@ function InternDetails() {
   const internship = internCard.find((intern) => intern.title === title);
   const { company, location, stipend, duration } = internship;
   const [popUp, setPopUp] = useState(false);
-  const [radioSelected, setRadioSelected] = useState(false);
+  const [radioSelected, setRadioSelected] = useState("");
+
   const handleOptionChange = (e) => setRadioSelected(e.target.value);
 
   if (!internship) {
     return <p>Internship not found</p>;
   }
+
+  const handleSubmit = () => {
+    window.alert("Submission Successful!");
+    setPopUp(false); // Close the popup after submission
+  };
 
   return (
     <div className="m-[20px] flex flex-col items-center">
@@ -30,7 +36,7 @@ function InternDetails() {
         <div className="bg-[#000000]/40 z-10 w-full h-full fixed top-0 left-0 flex items-center justify-center">
           <div className="bg-gray-100 p-[20px] fixed z-60 flex flex-col rounded-lg ">
             <div className="flex justify-between w-[800px] border-b-[2px]">
-              <div className=" flex flex-col  py-[10px]">
+              <div className=" flex flex-col justify-start items-start py-[10px]">
                 <p className="font-semibold text-[22px]">
                   Applying for {title}
                 </p>
@@ -60,6 +66,7 @@ function InternDetails() {
                   <input
                     type="radio"
                     id="1"
+                    value="1"
                     checked={radioSelected === "1"}
                     onChange={handleOptionChange}
                   />
@@ -71,6 +78,7 @@ function InternDetails() {
                   <input
                     type="radio"
                     id="2"
+                    value="2"
                     checked={radioSelected === "2"}
                     onChange={handleOptionChange}
                   />
@@ -80,6 +88,7 @@ function InternDetails() {
                   <input
                     type="radio"
                     id="3"
+                    value="3"
                     checked={radioSelected === "3"}
                     onChange={handleOptionChange}
                   />
@@ -91,6 +100,7 @@ function InternDetails() {
                   <input
                     type="radio"
                     id="4"
+                    value="4"
                     checked={radioSelected === "4"}
                     onChange={handleOptionChange}
                   />
@@ -103,7 +113,10 @@ function InternDetails() {
               <input type="file" className="text-[18px]" />
             </div>
             <div className="flex justify-center py-[10px]">
-              <button className="bg-[#078EDD] text-white rounded-md p-[10px] w-[120px] flex justify-center items-center">
+              <button
+                className="bg-[#078EDD] text-white rounded-md p-[10px] w-[120px] flex justify-center items-center"
+                onClick={handleSubmit}
+              >
                 <p>Submit</p>
               </button>
             </div>
@@ -306,7 +319,7 @@ function InternDetails() {
             <p className="text-gray-500 text-[18px]">3</p>
             <p className="font-medium pt-[10px]">About Techie</p>
             <a
-              href="https://www.techvastra.com/"
+              href="https://www.google.com/"
               className="text-[#078EDD] hover:underline"
             >
               Website →

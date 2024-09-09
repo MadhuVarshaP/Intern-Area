@@ -6,7 +6,8 @@ import { useProfile } from "../utils/ProfileContext";
 
 const Profile = () => {
   const { profilePicture, setProfilePicture } = useProfile();
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
+  const [newProfilePicture, setNewProfilePicture] = useState(profilePicture);
 
   // Handle profile picture change
   const handleProfilePictureChange = (event) => {
@@ -14,9 +15,36 @@ const Profile = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfilePicture(reader.result);
+        setNewProfilePicture(reader.result);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle profile update
+  const handleUpdateProfile = async () => {
+    // Ensure you have the user's access token
+    const { accessToken } = await getIdTokenClaims();
+
+    // Make a request to update the user's profile picture
+    // This assumes you have an endpoint for updating user data
+    try {
+      await fetch("/api/update-profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ profilePicture: newProfilePicture }),
+      });
+
+      // Update the profile picture in the context
+      setProfilePicture(newProfilePicture);
+
+      // Optionally, you might want to refresh the user profile data
+      // This would depend on how you're managing user data
+    } catch (error) {
+      console.error("Error updating profile:", error);
     }
   };
 
@@ -30,7 +58,7 @@ const Profile = () => {
       <div className="profile-container flex flex-col items-center justify-center p-4">
         <div className="flex flex-col items-center justify-center relative">
           <img
-            src={profilePicture || user.picture || profile}
+            src={newProfilePicture || user.picture || profile}
             alt="Profile"
             className="w-32 h-32 rounded-full border-4 border-gray-200"
           />
@@ -51,7 +79,10 @@ const Profile = () => {
           <p className="text-lg text-gray-600">Email: {user.email}</p>
         </div>
 
-        <button className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit w-[400px] my-[20px]">
+        <button
+          className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit w-[400px] my-[20px]"
+          onClick={handleUpdateProfile}
+        >
           Update Profile
         </button>
       </div>
