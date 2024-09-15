@@ -5,7 +5,7 @@ import { IoCashOutline } from "react-icons/io5";
 import { FcNext } from "react-icons/fc";
 import { Link } from "react-router-dom";
 
-function JobCard({title, company, location, salary, experience}) {
+function JobCard({ title, company, location, salary, experience }) {
   return (
     <div className="border-[2px] border-white shadow-md w-[400px] p-[10px] flex flex-col text-start rounded-lg m-[20px]">
       <div className="flex space-x-1 items-center">
@@ -32,7 +32,7 @@ function JobCard({title, company, location, salary, experience}) {
 
         <div className="flex justify-between py-[10px]">
           <p>Jobs</p>
-          <Link to="/job" className="flex space-x-1 items-center" >
+          <Link to={`/job/${title}`} className="flex space-x-1 items-center">
             <button className="text-[#078EDD]">View Details</button>
             <FcNext className="h-[18px] w-[20px]" />
           </Link>

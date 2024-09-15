@@ -1,5 +1,7 @@
 import React from "react";
 import { LiaFilterSolid } from "react-icons/lia";
+import JobCard from "./JobCard";
+import { jobCard } from "../constants/data";
 import JobCover from "./JobCover";
 
 function JobList() {
@@ -86,10 +88,20 @@ function JobList() {
           </button>
         </div>
         <div className="flex flex-col space-y-5 my-[5px]">
-          <JobCover />
-          <JobCover />
-          <JobCover />
-          <JobCover />
+          {jobCard.map((job, title) => (
+            <div
+              key={title}
+              className="flex justify-center items-center w-full sm:w-400px"
+            >
+              <JobCover
+                title={job.title}
+                company={job.company}
+                salary={job.salary}
+                experience={job.experience}
+                location={job.location}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Card from "./Card";
 import { GrFormPrevious } from "react-icons/gr";
 import { GrFormNext } from "react-icons/gr";
@@ -6,12 +6,15 @@ import { internCard } from "../constants/data";
 
 function LatestIntern() {
   const [selected, setSelected] = useState(null);
-
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const cardWidth = 400;
+  const cardGap = 10;
+  const itemsToShow = 1;
+  const totalItems = internCard.length;
   const selectOption = (option) => {
     setSelected(option);
   };
-
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const prevClick = () => {
     setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
@@ -22,6 +25,40 @@ function LatestIntern() {
       Math.min(prevIndex + 1, internCard.length - 1)
     );
   };
+
+  const carouselRef = useRef(null);
+
+  // Clone the first and last items for seamless infinite scroll
+  const cloneFirst = internCard.slice(0, 1);
+  const cloneLast = internCard.slice(-1);
+  const extendedInternCard = [...cloneLast, ...internCard, ...cloneFirst];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => prevIndex + 1); // Move to next slide
+    }, 3000); // 3 seconds delay
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
+  // Handle the infinite looping transition effect
+  useEffect(() => {
+    if (currentIndex === 0) {
+      // If it's the cloned last item (which is the first in the extended array)
+      setTimeout(() => {
+        setIsTransitioning(false); // Disable transition for instant change
+        setCurrentIndex(totalItems); // Jump to real last item
+      }, 500); // Allow time for transition
+    } else if (currentIndex === totalItems + 1) {
+      // If it's the cloned first item (which is the last in the extended array)
+      setTimeout(() => {
+        setIsTransitioning(false); // Disable transition for instant change
+        setCurrentIndex(1); // Jump to real first item
+      }, 500); // Allow time for transition
+    } else {
+      setIsTransitioning(true); // Enable transition during regular navigation
+    }
+  }, [currentIndex, totalItems]);
 
   return (
     <div className="bg-gray-50 py-[25px] ">
@@ -120,26 +157,32 @@ function LatestIntern() {
           Work from home
         </button>
       </div>
-      <div
-        className="flex w-full transition-transform duration-500 ease-in-out"
-        style={{
-          transform: `translateX(-${currentIndex * (400 + 10)}px)`,
-        }}
-      >
-        {internCard.map((intern, title) => (
-          <div
-            key={title}
-            className="flex justify-center items-center w-full sm:w-400px"
-          >
-            <Card
-              title={intern.title}
-              company={intern.company}
-              location={intern.location}
-              stipend={intern.stipend}
-              duration={intern.duration}
-            />
-          </div>
-        ))}
+      <div className="overflow-hidden" ref={carouselRef}>
+        <div
+          className={`flex w-full ${
+            isTransitioning
+              ? "transition-transform duration-500 ease-in-out"
+              : ""
+          }`}
+          style={{
+            transform: `translateX(-${currentIndex * (cardWidth + cardGap)}px)`,
+          }}
+        >
+          {extendedInternCard.map((intern, index) => (
+            <div
+              key={index}
+              className="flex justify-center items-center w-full sm:w-[400px]"
+            >
+              <Card
+                title={intern.title}
+                company={intern.company}
+                location={intern.location}
+                stipend={intern.stipend}
+                duration={intern.duration}
+              />
+            </div>
+          ))}
+        </div>
       </div>
       <div className="flex justify-center space-x-20 py-[20px] ">
         <button

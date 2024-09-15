@@ -1,6 +1,7 @@
 import React from "react";
 import { LiaFilterSolid } from "react-icons/lia";
 import InternCover from "./InternCover";
+import { internCard } from "../constants/data";
 
 function InternList() {
   return (
@@ -9,8 +10,8 @@ function InternList() {
         <p className="font-semibold text-[25px]">7000 Total Internships</p>
         <p className="text-[16px] text-gray-500">Latest Summer Internships</p>
       </div>
-      <div className="flex items-center justify-center my-[20px] space-x-4">
-        <div className="relative border-[1px] p-[10px] flex flex-col justify-center w-fit">
+      <div className="flex items-center justify-center lg:items-start my-[20px] space-x-4">
+        <div className="relative border-[1px] p-[10px] flex flex-col lg:justify-start justify-center w-fit">
           <div className="flex space-x-1 items-center justify-center py-[10px]">
             <LiaFilterSolid className="h-[22px] w-[22px] text-[#078EDD]" />
             <p className="font-medium">Filters</p>
@@ -77,11 +78,17 @@ function InternList() {
           </button>
         </div>
         <div className="flex flex-col space-y-5 my-[5px]">
-          <InternCover />
-          <InternCover />
-          <InternCover />
-          <InternCover />
-          <InternCover />
+          {internCard.map((intern, index) => (
+            <div key={index} className="flex  items-center w-full sm:w-[400px]">
+              <InternCover
+                title={intern.title}
+                company={intern.company}
+                location={intern.location}
+                stipend={intern.stipend}
+                duration={intern.duration}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>
