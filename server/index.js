@@ -12,6 +12,7 @@ connectDB();
 // Middleware
 app.use(cors());
 app.use(express.json({ extended: false }));
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // Routes
 app.use("/api/auth", authRoutes);
