@@ -1,6 +1,8 @@
 const express = require("express");
 const connectDB = require("./config/db.js");
 const authRoutes = require("./routes/auth.js");
+const internshipRoutes = require("./routes/internships.js");
+
 require("dotenv").config();
 
 const app = express();
@@ -10,12 +12,19 @@ const cors = require("cors");
 connectDB();
 
 // Middleware
-app.use(cors());
-app.use(express.json({ extended: false }));
+// app.use(cors());\
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Replace with your frontend URL
+    credentials: true, // If you're using credentials (tokens, cookies)
+  })
+);
+app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api", internshipRoutes);
 app.use("/api/jobs", require("./routes/jobs"));
 app.use("/api/applications", require("./routes/applications"));
 
