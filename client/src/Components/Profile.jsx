@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profile from "../Assets/user.jpg"; // Default image
 import { FaPenToSquare } from "react-icons/fa6";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useProfile } from "../utils/ProfileContext";
+import axios from "axios";
 
 const Profile = () => {
   const { profilePicture, setProfilePicture } = useProfile();
@@ -20,6 +21,20 @@ const Profile = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      // Send user data to backend
+      axios
+        .post("http://localhost:5000/api/users/auth0-register", user)
+        .then((response) => {
+          console.log("User stored/updated in MongoDB", response.data);
+        })
+        .catch((error) => {
+          console.error("Error storing/updating user", error);
+        });
+    }
+  }, [isAuthenticated, user]);
 
   // Handle profile update
   const handleUpdateProfile = async () => {

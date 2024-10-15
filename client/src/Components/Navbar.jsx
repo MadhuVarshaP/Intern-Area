@@ -6,6 +6,7 @@ import profile from "../Assets/user.jpg";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./LogoutButton";
 import { useProfile } from "../utils/ProfileContext";
+import axios from "axios";
 
 function Navbar() {
   const [dropDownIntern, setDropDownIntern] = useState(false);
@@ -27,11 +28,6 @@ function Navbar() {
         setDropDownJob(!dropDownJob);
       }
     }
-  };
-
-  // Function to handle profile picture or other actions
-  const handleProfilePictureChange = (event) => {
-    // Handle profile picture change logic here if needed
   };
 
   const logoutWithRedirect = () =>
@@ -162,12 +158,12 @@ function Navbar() {
             >
               <p>Get Started</p>
             </Link> */}
-            <Link
-              to="/register"
+            <button
+              onClick={() => loginWithRedirect()}
               className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit"
             >
               <p>Get Started</p>
-            </Link>
+            </button>
             <Link
               to="/admin"
               className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit"

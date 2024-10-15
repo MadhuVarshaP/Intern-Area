@@ -32,10 +32,7 @@ function Card({ title, company, location, stipend, duration }) {
         </div>
         <div className="flex justify-between py-[10px]">
           <p>Internship</p>
-          <Link
-            to={`/intern/${title}`}
-            className="flex space-x-1 items-center"
-          >
+          <Link to={`/intern/${title}`} className="flex space-x-1 items-center">
             <button className="text-[#078EDD]">View Details</button>
             <FcNext className="h-[18px] w-[20px]" />
           </Link>

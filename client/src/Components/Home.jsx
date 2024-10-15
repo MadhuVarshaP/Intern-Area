@@ -8,6 +8,7 @@ import { GrFormNext } from "react-icons/gr";
 import LatestIntern from "./LatestIntern";
 import LatestJob from "./LatestJob";
 import { useAuth0 } from "@auth0/auth0-react";
+import InternshipUploader from "./InternshipUploader";
 
 function Home() {
   const Gallery = [img1, img2, img3, img4, img1, img2, img3, img4];
