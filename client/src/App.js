@@ -5,7 +5,6 @@ import Home from "./Components/Home";
 import Navbar from "./Components/Navbar";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
-import AdminLogin from "./Components/AdminLogin";
 import JobDetails from "./Components/JobDetails";
 import InternDetails from "./Components/InternDetails";
 import InternList from "./Components/InternList";
@@ -21,7 +20,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<AdminLogin />} />
           <Route path="/intern/:title" element={<InternDetails />} />
           <Route path="/job/:title" element={<JobDetails />} />
           <Route path="/profile" element={<Profile />} />

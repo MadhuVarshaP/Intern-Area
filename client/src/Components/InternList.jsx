@@ -1,13 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { LiaFilterSolid } from "react-icons/lia";
 import InternCover from "./InternCover";
-import { internCard } from "../constants/data";
+import axios from "axios";
 
 function InternList() {
+  const [internships, setInternships] = useState([]);
+
+  useEffect(() => {
+    const fetchInternships = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/internships"
+        );
+        setInternships(response.data);
+      } catch (error) {
+        console.error("Error fetching internships:", error.message);
+      }
+    };
+
+    fetchInternships();
+  }, []);
+
   return (
     <div>
       <div className="my-[20px] space-y-2">
-        <p className="font-semibold text-[25px]">7000 Total Internships</p>
+        <p className="font-semibold text-[25px]">200 Total Internships</p>
         <p className="text-[16px] text-gray-500">Latest Summer Internships</p>
       </div>
       <div className="flex items-center justify-center lg:items-start my-[20px] space-x-4">
@@ -78,14 +95,18 @@ function InternList() {
           </button>
         </div>
         <div className="flex flex-col space-y-5 my-[5px]">
-          {internCard.map((intern, index) => (
-            <div key={index} className="flex  items-center w-full sm:w-[400px]">
+          {internships.map((intern) => (
+            <div
+              key={intern._id}
+              className="flex  items-center w-full sm:w-[400px]"
+            >
               <InternCover
                 title={intern.title}
                 company={intern.company}
                 location={intern.location}
                 stipend={intern.stipend}
                 duration={intern.duration}
+                posted={intern.posted}
               />
             </div>
           ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoArrowUpRight } from "react-icons/go";
 import { GoHome } from "react-icons/go";
 import { BiCaretRightCircle } from "react-icons/bi";
@@ -13,17 +13,57 @@ import { useParams } from "react-router-dom";
 
 function JobDetails() {
   const { title } = useParams();
-  const jobs = jobCard.find((job) => job.title === title);
+  const [job, setJob] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const { company, salary, experience } = jobs;
   const [popUp, setPopUp] = useState(false);
   const [radioSelected, setRadioSelected] = useState("");
 
+  useEffect(() => {
+    const fetchJob = async () => {
+      console.log("title", encodeURIComponent(title));
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/jobs/jobs/${encodeURIComponent(title)}`
+        );
+        console.log("response from api:", response);
+        if (!response.ok) {
+          throw new Error("Failed to fetch job");
+        }
+        const data = await response.json();
+        console.log("data", data);
+        setJob(data);
+      } catch (error) {
+        console.log("Error fetching jo  data:", error);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchJob();
+  }, [title]);
+
   const handleOptionChange = (e) => setRadioSelected(e.target.value);
 
-  if (!jobs) {
-    return <p>Job not found</p>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error || !job) return <p>Job not found</p>;
+
+  const {
+    company,
+    location,
+    salary,
+    experience,
+    description,
+    skills,
+    perks,
+    website,
+    startDate,
+    applyBy,
+    applicants,
+    posted,
+  } = job;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     window.alert("Submission Successful!");
@@ -31,8 +71,8 @@ function JobDetails() {
   };
 
   return (
-    <div className="m-[20px]">
-      <p className="text-[25px] font-semibold">{title}</p>
+    <div className="m-[20px] flex flex-col items-center">
+      <p className="text-[25px] font-semibold ">{title}</p>
       {popUp && (
         <div className="bg-[#000000]/40 z-10 w-full h-full fixed top-0 left-0 flex items-center justify-center">
           <div className="bg-gray-100 p-[20px] fixed z-60 flex flex-col rounded-lg">
@@ -130,90 +170,78 @@ function JobDetails() {
           </div>
         </div>
       )}
-
       <div className="flex justify-center">
-        <div className="rounded-md border-[1px] m-[30px] p-[20px] w-[1000px]">
-          <div className="flex flex-col items-start">
-            <div className="flex space-x-1 items-center">
-              <GoArrowUpRight className="h-[18px]" />
-              <p className="text-[18px] text-[#078EDD]">Actively Hiring</p>
-            </div>
-            <div className="flex flex-col py-[10px] justify-start text-start">
-              <p className="font-medium">{title} Job</p>
-              <p className="text-[18px]">{company}</p>
-            </div>
-            <div className="flex space-x-1 items-center py-[10px]">
-              <GoHome className="h-[22px] w-[22px]" />
-              <p className="text-[18px]">Work from home</p>
-            </div>
-            <div className="flex space-x-20">
-              <div className="flex flex-col text-left space-y-[-10px]">
-                <div className="flex space-x-1 text-gray-500 items-center py-[10px]">
-                  <BiCaretRightCircle className="h-[18px] w-[18px]" />
-                  <p className="text-[16px]">START DATE</p>
-                </div>
-                <p className="text-[18px]">Immediately</p>
+        <div className="flex flex-col rounded-md border-[1px] m-[30px] p-[20px] w-[1000px] ">
+          <div className="flex space-x-1 items-center">
+            <GoArrowUpRight className="h-[18px]" />
+            <p className="text-[18px] text-[#078EDD]">Actively Hiring</p>
+          </div>
+          <div className="flex flex-col py-[10px] justify-start text-start">
+            <p className="font-medium">{title}</p>
+            <p className="text-[18px]">{company}</p>
+          </div>
+          <div className="flex space-x-1 items-center py-[10px]">
+            <GoHome className="h-[22px] w-[22px]" />
+            <p className="text-[18px]">{location}</p>
+          </div>
+          <div className="flex space-x-20">
+            <div className="flex flex-col text-left space-y-[-10px] ">
+              <div className="flex space-x-1 text-gray-500 items-center py-[10px]">
+                <BiCaretRightCircle className="h-[18px] w-[18px]" />
+                <p className="text-[16px]">START DATE</p>
               </div>
-              <div className="flex flex-col text-left space-y-[-10px]">
-                <div className="flex space-x-1 text-gray-500 items-center py-[10px]">
-                  <CiCalendar className="h-[18px] w-[18px]" />
-                  <p className="text-[16px]">EXPERIENCE</p>
-                </div>
-                <p className="text-[18px]">{experience}</p>
-              </div>
-              <div className="flex flex-col text-left space-y-[-10px]">
-                <div className="flex space-x-1 text-gray-500 items-center py-[10px]">
-                  <TbCashBanknote className="h-[18px] w-[18px]" />
-                  <p className="text-[16px]">SALARY</p>
-                </div>
-                <p className="text-[18px]">{salary}</p>
-              </div>
-              <div className="flex flex-col text-left space-y-[-10px]">
-                <div className="flex space-x-1 text-gray-500 items-center py-[10px]">
-                  <CgSandClock className="h-[18px] w-[18px]" />
-                  <p className="text-[16px]">APPLY BY</p>
-                </div>
-                <p className="text-[18px]">10 Jul' 2024</p>
-              </div>
+              <p className="text-[18px]">{startDate}</p>
             </div>
-            <div className="py-[20px] flex space-x-5">
-              <div className="bg-gray-200 rounded-md space-x-1 text-gray-600 w-fit flex items-center px-[5px]">
-                <PiClockClockwiseFill className="w-[20px] h-[20px]" />
-                <p className="text-[16px]">Part Time</p>
+            <div className="flex flex-col text-left space-y-[-10px] ">
+              <div className="flex space-x-1 text-gray-500 items-center py-[10px]">
+                <CiCalendar className="h-[18px] w-[18px]" />
+                <p className="text-[16px]">EXPERIENCE</p>
               </div>
-              <div className="bg-gray-200 rounded-md space-x-1 text-gray-600 w-fit flex items-center px-[5px]">
-                <LuUsers className="w-[20px] h-[20px]" />
-                <p className="text-[16px]">20 Applicants</p>
+              <p className="text-[18px]">{experience} years</p>
+            </div>
+            <div className="flex flex-col text-left space-y-[-10px] ">
+              <div className="flex space-x-1 text-gray-500 items-center py-[10px]">
+                <TbCashBanknote className="h-[18px] w-[18px]" />
+                <p className="text-[16px]">SALARY</p>
               </div>
+              <p className="text-[18px]">₹{salary}/year</p>
             </div>
-            <div className="py-[20px] text-left">
-              <p className="text-[20px] font-medium">About {company}</p>
-              <p className="text-[16px] text-gray-500">
-                The Innovation Program is a new initiative under the Grand
-                Challenges India (GCI) umbrella, and will work across the
-                portfolios of the Department of Biotechnology, and the Bill and
-                Melinda Gates Foundation. This unique partnership is aimed at
-                seeding, fostering, and scaling up innovations in the
-                biotechnology space to create impactful products to benefit
-                people in India and beyond.
-              </p>
-            </div>
-            <div className="py-[10px] text-left">
-              <p className="text-[20px] font-medium">Activity on Internshala</p>
-              <ul className="list-disc px-[20px]">
-                <li>Hiring since November 2023</li>
-                <li>40 opportunities posted</li>
-                <li>300 candidates hired</li>
-              </ul>
+            <div className="flex flex-col text-left space-y-[-10px] ">
+              <div className="flex space-x-1 text-gray-500 items-center py-[10px]">
+                <CgSandClock className="h-[18px] w-[18px]" />
+                <p className="text-[16px]">APPLY BY</p>
+              </div>
+              <p className="text-[18px]">{applyBy}</p>
             </div>
           </div>
-          <div className="flex justify-center pt-[20px] text-center">
-            <button
-              onClick={() => setPopUp(true)}
-              className="bg-[#078EDD] text-white rounded-md p-[10px] w-[120px] flex justify-center items-center"
-            >
-              <p>Apply Now</p>
-            </button>
+          <div className="py-[20px] flex space-x-5">
+            <div className="bg-gray-200 rounded-md space-x-1 text-gray-600 w-fit flex items-center px-[5px]">
+              <PiClockClockwiseFill className="w-[20px] h-[20px]" />
+              <p className="text-[16px]">Posted {posted} weeks ago</p>
+            </div>
+            <div className="bg-gray-200 rounded-md text-gray-600 w-fit px-[5px]">
+              <p className="text-[16px]">Job</p>
+            </div>
+          </div>
+          <div className="text-gray-500 flex items-center space-x-1">
+            <LuUsers />
+            <p className="text-gray-800 text-[18px]">
+              {applicants}+ Applicants
+            </p>
+          </div>
+          <div className="flex flex-col text-left py-[20px] space-y-2">
+            <p className="font-medium pt-[10px]">About the job</p>
+            <div className="text-gray-500 text-[18px]">
+              <p>{description}</p>
+            </div>
+            <div className="flex justify-center py-[10px]">
+              <button
+                onClick={() => setPopUp(!popUp)}
+                className="bg-[#078EDD] text-white w-[150px] h-[50px] rounded-md"
+              >
+                Apply Now
+              </button>
+            </div>
           </div>
         </div>
       </div>

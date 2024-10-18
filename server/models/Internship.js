@@ -22,6 +22,14 @@ const internshipSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    description: String,
+    applicants: Number,
+    skills: [String],
+    startDate: String,
+    applyBy: String,
+    posted: String,
+    perks: [String],
+    website: String,
   },
   { timestamps: true }
 );

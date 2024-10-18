@@ -1,12 +1,11 @@
 import React from "react";
 import { GoArrowUpRight } from "react-icons/go";
-import { CiLocationOn } from "react-icons/ci";
+import { CiCalendar, CiLocationOn } from "react-icons/ci";
 import { IoCashOutline } from "react-icons/io5";
-import { CiCalendar } from "react-icons/ci";
 import { FcNext } from "react-icons/fc";
 import { Link } from "react-router-dom";
 
-function Card({ title, company, location, stipend, duration }) {
+function JobUploader({ title, company, location, salary, experience }) {
   return (
     <div className="border-[2px] border-white shadow-md w-[400px] p-[10px] flex flex-col text-start rounded-lg m-[20px]">
       <div className="flex space-x-1 items-center">
@@ -24,15 +23,16 @@ function Card({ title, company, location, stipend, duration }) {
         </div>
         <div className="flex items-center space-x-1">
           <IoCashOutline className="h-[25px] w-[25px]" />
-          <p>{stipend}</p>
+          <p>₹{salary}/ year</p>
         </div>
         <div className="flex items-center space-x-1">
           <CiCalendar className="h-[25px] w-[25px]" />
-          <p>{duration}</p>
+          <p>{experience} years</p>
         </div>
+
         <div className="flex justify-between py-[10px]">
-          <p>Internship</p>
-          <Link to={`/intern/${title}`} className="flex space-x-1 items-center">
+          <p>Job</p>
+          <Link to={`/job/${title}`} className="flex space-x-1 items-center">
             <button className="text-[#078EDD]">View Details</button>
             <FcNext className="h-[18px] w-[20px]" />
           </Link>
@@ -42,4 +42,4 @@ function Card({ title, company, location, stipend, duration }) {
   );
 }
 
-export default Card;
+export default JobUploader;

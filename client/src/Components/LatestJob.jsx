@@ -1,154 +1,97 @@
-import React, { useState } from "react";
-import JobCard from "./JobCard";
-import { GrFormPrevious } from "react-icons/gr";
-import { GrFormNext } from "react-icons/gr";
-import { jobCard } from "../constants/data";
+import React, { useState, useEffect, useRef } from "react";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import JobUploader from "./JobUploader";
+import axios from "axios";
+import SliderWrapper from "../utils/SliderWrapper";
 
 function LatestJob() {
-  //choose option should be selected
+  const [jobs, setJobs] = useState([]);
   const [selected, setSelected] = useState(null);
+  const sliderRef = useRef(null);
 
-  //change to be done after clicking the option
-  const selectOption = (option) => {
-    setSelected(option);
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/jobs/jobs");
+        setJobs(response.data);
+      } catch (error) {
+        console.error("Error fetching jobs:", error.message);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+  // Slider settings
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
   };
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const prevClick = () => {
-    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+  const selectOption = (category) => {
+    setSelected(category);
   };
 
-  const nextClick = () => {
-    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, jobCard.length - 1));
-  };
   return (
-    <div className="py-[25px]">
+    <div className="bg-gray-50 py-[25px]">
       <p className="text-[24px] font-medium py-[25px]">Latest Jobs for you</p>
       <div className="space-x-5">
-        <button
-          onClick={() => selectOption("Big Data")}
-          className={`border-[2px] border-[#078EDD] p-[10px] rounded-md hover:bg-[#078EDD] hover:text-white ${
-            selected === "Big Data"
-              ? "bg-[#078EDD] text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          Big Data
-        </button>
-        <button
-          onClick={() => selectOption("Blockchain")}
-          className={`border-[2px] border-[#078EDD] p-[10px] rounded-md hover:bg-[#078EDD] hover:text-white ${
-            selected === "Blockchain"
-              ? "bg-[#078EDD] text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          Blockchain
-        </button>
-        <button
-          onClick={() => selectOption("Data Science")}
-          className={`border-[2px] border-[#078EDD] p-[10px] rounded-md hover:bg-[#078EDD] hover:text-white ${
-            selected === "Data Science"
-              ? "bg-[#078EDD] text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          Data Science
-        </button>
-        <button
-          onClick={() => selectOption("Full Stack")}
-          className={`border-[2px] border-[#078EDD] p-[10px] rounded-md hover:bg-[#078EDD] hover:text-white ${
-            selected === "Full Stack"
-              ? "bg-[#078EDD] text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          Full Stack
-        </button>
-        <button
-          onClick={() => selectOption("Marketing")}
-          className={`border-[2px] border-[#078EDD] p-[10px] rounded-md hover:bg-[#078EDD] hover:text-white ${
-            selected === "Marketing"
-              ? "bg-[#078EDD] text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          Marketing
-        </button>
-        <button
-          onClick={() => selectOption("Human Resource")}
-          className={`border-[2px] border-[#078EDD] p-[10px] rounded-md hover:bg-[#078EDD] hover:text-white ${
-            selected === "Human Resource"
-              ? "bg-[#078EDD] text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          Human Resource
-        </button>
-        <button
-          onClick={() => selectOption("Engineering")}
-          className={`border-[2px] border-[#078EDD] p-[10px] rounded-md hover:bg-[#078EDD] hover:text-white ${
-            selected === "Engineering"
-              ? "bg-[#078EDD] text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          Engineering
-        </button>
-        <button
-          onClick={() => selectOption("Part-Time")}
-          className={`border-[2px] border-[#078EDD] p-[10px] rounded-md hover:bg-[#078EDD] hover:text-white ${
-            selected === "Part-Time"
-              ? "bg-[#078EDD] text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          Part-Time
-        </button>
-        <button
-          onClick={() => selectOption("Work from home")}
-          className={`border-[2px] border-[#078EDD] p-[10px] rounded-md hover:bg-[#078EDD] hover:text-white ${
-            selected === "Work from home"
-              ? "bg-[#078EDD] text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          Work from home
-        </button>
-      </div>
-      <div
-        className="flex w-full transition-transform duration-500 ease-in-out"
-        style={{
-          transform: `translateX(-${currentIndex * (400 + 10)}px)`,
-        }}
-      >
-        {jobCard.map((job, title) => (
-          <div
-            key={title}
-            className="flex justify-center items-center w-full sm:w-400px"
+        {[
+          "Big Data",
+          "Blockchain",
+          "Data Science",
+          "Full Stack",
+          "Marketing",
+          "Human Resource",
+          "Engineering",
+          "Part-Time",
+          "Work from home",
+        ].map((category) => (
+          <button
+            key={category}
+            onClick={() => selectOption(category)}
+            className={`border-[2px] border-[#078EDD] p-[10px] rounded-md hover:bg-[#078EDD] hover:text-white ${
+              selected === category
+                ? "bg-[#078EDD] text-white"
+                : "bg-white text-black"
+            }`}
           >
-            <JobCard
-              title={job.title}
-              company={job.company}
-              salary={job.salary}
-              experience={job.experience}
-            />
-          </div>
+            {category}
+          </button>
         ))}
       </div>
-      <div className="flex justify-center space-x-20 py-[20px] ">
+      <div className="overflow-hidden">
+        {jobs.length > 0 ? (
+          <SliderWrapper ref={sliderRef} {...settings}>
+            {jobs.map((job) => (
+              <div key={job._id} className="flex justify-center items-center">
+                <JobUploader
+                  title={job.title}
+                  company={job.company}
+                  location={job.location}
+                  salary={job.salary}
+                  experience={job.experience}
+                />
+              </div>
+            ))}
+          </SliderWrapper>
+        ) : (
+          <p>Loading jobs...</p>
+        )}
+      </div>
+      <div className="flex justify-center space-x-20 py-[20px]">
         <button
+          onClick={() => sliderRef.current.slickPrev()}
           className="rounded-[999px] flex justify-center items-center border-[2px] p-[8px]"
-          onClick={prevClick}
-          disabled={currentIndex === 0}
         >
           <GrFormPrevious className="h-[30px] w-[30px]" />
         </button>
         <button
+          onClick={() => sliderRef.current.slickNext()}
           className="rounded-[999px] flex justify-center items-center border-[2px] p-[8px]"
-          onClick={nextClick}
-          disabled={currentIndex === jobCard.length - 1}
         >
           <GrFormNext className="h-[30px] w-[30px]" />
         </button>

@@ -1,7 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/db.js");
-const authRoutes = require("./routes/auth.js");
 const internshipRoutes = require("./routes/internships.js");
+const jobRoutes = require("./routes/jobs.js");
 
 require("dotenv").config();
 
@@ -23,10 +23,8 @@ app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // Routes
-app.use("/api/auth", authRoutes);
 app.use("/api", internshipRoutes);
-app.use("/api/jobs", require("./routes/jobs"));
-app.use("/api/applications", require("./routes/applications"));
+app.use("/api/jobs", jobRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

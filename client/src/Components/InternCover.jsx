@@ -6,7 +6,7 @@ import { IoLocationOutline } from "react-icons/io5";
 import { PiClockClockwiseFill } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
-function InternCover({ title, company, location, stipend, duration }) {
+function InternCover({ title, company, location, stipend, duration, posted }) {
   return (
     <Link to="/intern">
       <div className="border-[1px] p-[10px] flex flex-col justify-center w-[600px] rounded-md shadow-md">
@@ -34,7 +34,7 @@ function InternCover({ title, company, location, stipend, duration }) {
         <div className="py-[10px] flex space-x-5">
           <div className="bg-gray-200 rounded-md space-x-1 text-gray-600 w-fit flex items-center px-[5px]">
             <PiClockClockwiseFill className="w-[18px] h-[18px]" />
-            <p className="text-[14px]">Posted 1 week ago</p>
+            <p className="text-[14px]">Posted {posted} ago</p>
           </div>
           <div className="bg-gray-200 rounded-md text-gray-600 w-fit px-[5px]">
             <p className="text-[14px]">Internship</p>

@@ -1,27 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../Assets/logo.png";
 import { IoMdArrowDropdown, IoMdArrowDropup, IoMdSearch } from "react-icons/io";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import profile from "../Assets/user.jpg";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./LogoutButton";
 import { useProfile } from "../utils/ProfileContext";
-import axios from "axios";
 
 function Navbar() {
   const [dropDownIntern, setDropDownIntern] = useState(false);
   const [dropDownJob, setDropDownJob] = useState(false);
   const { profilePicture } = useProfile();
-  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const navigate = useNavigate();
+  const {
+    user,
+    isAuthenticated,
+    loginWithRedirect,
+    logout,
+    getAccessTokenSilently,
+  } = useAuth0();
 
-  // Function to handle dropdown click
   const handleDropdownClick = (section) => {
     if (!isAuthenticated) {
-      // Redirect to login page if not authenticated
       loginWithRedirect();
     } else {
-      // Toggle dropdown visibility if authenticated
       if (section === "intern") {
         setDropDownIntern(!dropDownIntern);
       } else if (section === "job") {
@@ -29,13 +30,6 @@ function Navbar() {
       }
     }
   };
-
-  const logoutWithRedirect = () =>
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin,
-      },
-    });
 
   return (
     <div className="p-[20px] flex border-b-[2px] shadow-sm">
@@ -164,12 +158,6 @@ function Navbar() {
             >
               <p>Get Started</p>
             </button>
-            <Link
-              to="/admin"
-              className="bg-[#078EDD] text-white rounded-md p-[10px] h-fit"
-            >
-              <p>Admin</p>
-            </Link>
           </>
         )}
       </div>

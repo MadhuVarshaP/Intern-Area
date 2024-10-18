@@ -19,7 +19,8 @@ root.render(
     <Auth0Provider
       domain="dev-qd1ntdamndjem8yr.us.auth0.com"
       clientId="h16JY9r30ogPhrLro0XzPxrjjNpNMCDk"
-      audience=""
+      audience="http://localhost:3000/api/auth"
+      scope="openid profile email"
       authorizationParams={{
         redirect_uri: window.location.origin,
       }}

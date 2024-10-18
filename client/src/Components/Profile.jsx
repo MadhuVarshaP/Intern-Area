@@ -22,20 +22,6 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      // Send user data to backend
-      axios
-        .post("http://localhost:5000/api/users/auth0-register", user)
-        .then((response) => {
-          console.log("User stored/updated in MongoDB", response.data);
-        })
-        .catch((error) => {
-          console.error("Error storing/updating user", error);
-        });
-    }
-  }, [isAuthenticated, user]);
-
   // Handle profile update
   const handleUpdateProfile = async () => {
     // Ensure you have the user's access token
